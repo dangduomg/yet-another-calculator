@@ -128,5 +128,7 @@ class Calc(Transformer):
         callee, *args = items
         try:
             return self.functions[callee](*args)
+        except InvalidOperation as e:
+            raise ValueError(f'invalid `{callee}` operation') from e
         except KeyError as e:
             raise RuntimeError(f'`{callee}` is not a function') from e
