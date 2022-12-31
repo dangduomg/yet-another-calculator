@@ -1,9 +1,10 @@
 # yet another calculator
 
-from lark import Lark
-from decimal import Decimal
 import logging
+from decimal import Decimal
+
 import colorama
+from lark import Lark
 
 import transformer
 import functions
