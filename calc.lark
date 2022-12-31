@@ -1,0 +1,56 @@
+// yet another calculator
+// precedence table (from least to most precedent)
+// ASsignment       <- := += -= *= /= %= **=
+// Comparison       = == != ~= < <= > >=
+// Additive         + -
+// Multiplicative   * / %
+// Unary            + -
+// Power            **
+
+?expr: as_expr
+
+?as_expr: NAME ("<-" | ":=") as_expr -> set
+        | NAME "+=" as_expr -> iadd
+        | NAME "-=" as_expr -> isub
+        | NAME "*=" as_expr -> imul
+        | NAME "/=" as_expr -> idiv
+        | NAME "%=" as_expr -> imod
+        | NAME "**=" as_expr -> ipow
+        | c_expr
+
+?c_expr: a_expr ("=" | "==") a_expr -> eq
+       | a_expr ("!=" | "~=") a_expr -> ne
+       | a_expr "<" a_expr -> lt
+       | a_expr "<=" a_expr -> le
+       | a_expr ">" a_expr -> gt
+       | a_expr ">=" a_expr -> ge
+       | a_expr
+
+?a_expr: a_expr "+" m_expr -> add
+       | a_expr "-" m_expr -> sub
+       | m_expr
+
+?m_expr: m_expr "*" u_expr -> mul
+       | m_expr "/" u_expr -> div
+       | m_expr "%" u_expr -> mod
+       | u_expr
+
+?u_expr: "+" u_expr -> pos
+       | "-" u_expr -> neg
+       | p_expr
+
+?p_expr: atom "**" u_expr -> pow
+       | atom
+
+?atom: NUMBER -> num
+     | NAME -> var
+     | NAME "(" (expr ("," expr)*)? ")" -> call
+     | "(" expr ")"
+
+NAME: CNAME
+
+%import common.NUMBER
+%import common.CNAME
+
+%import common.WS
+%ignore WS
