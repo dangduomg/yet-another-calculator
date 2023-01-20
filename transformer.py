@@ -1,7 +1,7 @@
 # transformer (evaluator) for calculator
 
+import numpy as np
 from lark import Transformer
-from decimal import Decimal, DivisionByZero, InvalidOperation
 
 
 class Calc(Transformer):
@@ -11,7 +11,7 @@ class Calc(Transformer):
 
     def num(self, items):
         num, = items
-        return Decimal(num)
+        return float(num)
 
     def var(self, items):
         varname, = items
@@ -54,34 +54,12 @@ class Calc(Transformer):
 
     def div(self, items):
         a, b = items
-        try:
-            return a / b
-        except (DivisionByZero, InvalidOperation):
-            raise ZeroDivisionError('Division by zero')
+        return a / b
 
     def idiv(self, items):
         varname, value = items
-        try:
-            self.variables[varname] /= value
-            return self.variables[varname]
-        except (DivisionByZero, InvalidOperation):
-            raise ZeroDivisionError('Division by zero')
-
-    def mod(self, items):
-        a, b = items
-        try:
-            return a % b
-        except (DivisionByZero, InvalidOperation):
-            raise ZeroDivisionError('Modulo by zero')
-
-
-    def imod(self, items):
-        varname, value = items
-        try:
-            self.variables[varname] %= value
-            return self.variables[varname]
-        except (DivisionByZero, InvalidOperation):
-            raise ZeroDivisionError('Modulo by zero')
+        self.variables[varname] /= value
+        return self.variables[varname]
 
     def pow(self, items):
         a, b = items
@@ -128,7 +106,8 @@ class Calc(Transformer):
         callee, *args = items
         try:
             return self.functions[callee](*args)
-        except InvalidOperation as e:
-            raise ValueError(f'invalid `{callee}` operation') from e
         except KeyError as e:
             raise RuntimeError(f'`{callee}` is not a function') from e
+
+    def array(self, items):
+        return np.array(items)

@@ -1,9 +1,9 @@
 # yet another calculator
 
 import logging
-from decimal import Decimal
 
 import colorama
+import numpy as np
 from lark import Lark
 
 import transformer
@@ -20,6 +20,15 @@ with open('calc.lark') as f:
     parser = Lark(f, parser='lalr', start='expr', transformer=calc)
 
 
+def calc_repr(o):
+    if isinstance(o, (float, bool)):
+        return str(o)
+    elif isinstance(o, np.ndarray):
+        return f'[{", ".join(calc_repr(x) for x in o)}]'
+    else:
+        return f'python: {o}'
+
+
 def main():
     colorama.init()
     logging.basicConfig(format='\033[91m%(levelname)s: %(message)s\033[m')
@@ -28,7 +37,7 @@ def main():
         calc_input = input('calc> ')
         try:
             res = parser.parse(calc_input)
-            print(res)
+            print(calc_repr(res))
             calc.set(('_', res))
         except Exception as e:
             logging.error(e)

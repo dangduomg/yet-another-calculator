@@ -9,13 +9,12 @@
 
 ?expr: as_expr
 
-?as_expr: NAME "=" as_expr -> set
-        | NAME "+=" as_expr -> iadd
-        | NAME "-=" as_expr -> isub
-        | NAME "*=" as_expr -> imul
-        | NAME "/=" as_expr -> idiv
-        | NAME "%=" as_expr -> imod
-        | NAME "**=" as_expr -> ipow
+?as_expr: CNAME "=" as_expr -> set
+        | CNAME "+=" as_expr -> iadd
+        | CNAME "-=" as_expr -> isub
+        | CNAME "*=" as_expr -> imul
+        | CNAME "/=" as_expr -> idiv
+        | CNAME "**=" as_expr -> ipow
         | c_expr
 
 ?c_expr: a_expr "==" a_expr -> eq
@@ -32,7 +31,6 @@
 
 ?m_expr: m_expr "*" u_expr -> mul
        | m_expr "/" u_expr -> div
-       | m_expr "%" u_expr -> mod
        | u_expr
 
 ?u_expr: "+" u_expr -> pos
@@ -43,11 +41,10 @@
        | atom
 
 ?atom: NUMBER -> num
-     | NAME -> var
-     | NAME "(" (expr ("," expr)*)? ")" -> call
+     | "[" (expr ("," expr)*)? "]" -> array
+     | CNAME -> var
+     | CNAME "(" (expr ("," expr)*)? ")" -> call
      | "(" expr ")"
-
-NAME: CNAME
 
 %import common.NUMBER
 %import common.CNAME
