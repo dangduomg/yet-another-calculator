@@ -111,3 +111,9 @@ class Calc(Transformer):
 
     def array(self, items):
         return np.array(items)
+
+    def array_shorthand(self, items):
+        return np.array(items)
+
+    def shorthand_row(self, items):
+        return np.array(items)

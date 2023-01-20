@@ -40,11 +40,16 @@
 ?p_expr: atom "**" u_expr -> pow
        | atom
 
-?atom: NUMBER -> num
+?atom: num
      | "[" (expr ("," expr)*)? "]" -> array
+     | "%[" (shorthand_row (";" shorthand_row)*)? "]" -> array_shorthand
      | CNAME -> var
      | CNAME "(" (expr ("," expr)*)? ")" -> call
      | "(" expr ")"
+
+num: NUMBER
+
+shorthand_row: num+
 
 %import common.NUMBER
 %import common.CNAME

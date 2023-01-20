@@ -3,10 +3,10 @@
 from decimal import Decimal
 import sys
 
-from numpy import exp, log, log10, sqrt, sin, cos, tan, sum, prod
+from numpy import exp, log, log10, sqrt, sin, cos, tan, arcsin, arccos, arctan, sum, prod
 
+asin = arcsin
+acos = arccos
+atan = arctan
 
-def exit():
-    sys.exit()
-
-quit = exit
+quit = exit = sys.exit
