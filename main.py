@@ -21,8 +21,10 @@ with open('calc.lark') as f:
 
 
 def calc_repr(o):
-    if isinstance(o, (float, bool)):
+    if isinstance(o, float):
         return str(o)
+    elif isinstance(o, (bool, np.bool_)):
+        return str(o).lower()
     elif isinstance(o, np.ndarray):
         return f'[{", ".join(calc_repr(x) for x in o)}]'
     else:
