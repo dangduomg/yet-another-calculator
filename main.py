@@ -16,7 +16,7 @@ calc = transformer.Calc(
     variables=vars(variables),
 )
 
-with open('calc.lark') as f:
+with open('calc.lark', encoding='utf-8') as f:
     parser = Lark(f, parser='lalr', start='expr', transformer=calc)
 
 
